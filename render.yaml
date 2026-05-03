@@ -1,0 +1,61 @@
+services:
+  - type: web
+    name: sentinel-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /actuator/health
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - backend/**
+    envVars:
+      - key: SERVER_PORT
+        value: "10000"
+      - key: INGESTION_INTERVAL_MS
+        value: "5000"
+      - key: DB_HOST
+        fromDatabase:
+          name: sentinel-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: sentinel-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: sentinel-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: sentinel-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: sentinel-db
+          property: password
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: JWT_ISSUER_URI
+        sync: false
+
+  - type: web
+    name: sentinel-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - frontend/**
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          name: sentinel-backend
+          type: web
+          property: hostport
+
+
+databases:
+  - name: sentinel-db
+    plan: free
