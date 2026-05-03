@@ -23,9 +23,6 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          # Point to your IdP's JWKS endpoint.
-          # In Docker this is overridden via JWT_ISSUER_URI env var.
-          # In production this MUST be set to a real IdP — do not rely on the default.
           issuer-uri: ${JWT_ISSUER_URI:http://localhost:8180/realms/sentinel}
 
 server:

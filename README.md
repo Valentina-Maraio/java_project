@@ -132,7 +132,6 @@ java_project/
 │       ├── hooks/              # useWebSocket
 │       └── types/              # fhir.ts (FHIR-Lite TypeScript types)
 ├── docker-compose.yml
-└── specs.md
 ```
 
 ---
