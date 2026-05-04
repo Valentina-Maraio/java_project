@@ -3,7 +3,7 @@
 > **Company Digital Excellence & Interoperability** — A high-performance middleware that bridges diagnostic laboratory instruments with clinical dashboards using HL7 FHIR R4.
 
 ---
-The project is not online yet, so you can see how it looks like ![HERE](https://youtu.be/nE0HGuDr_IU)
+The project is not online yet, so you can see how it looks like here : https://youtu.be/nE0HGuDr_IU
 ---
 
 ## Overview
