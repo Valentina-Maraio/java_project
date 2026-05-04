@@ -3,12 +3,16 @@
 > **Company Digital Excellence & Interoperability** — A high-performance middleware that bridges diagnostic laboratory instruments with clinical dashboards using HL7 FHIR R4.
 
 ---
-The project is not online yet, so you can see how it looks like here : https://youtu.be/nE0HGuDr_IU
+Screen 1 ![Patient X](./screenshots/screen_1.png)
+Screen 2 ![Patient X](./screenshots/screen_2.png)
+
+The project is not online yet, so you can have a look at it here:
+![Demonstration Video](https://youtu.be/nE0HGuDr_IU)
 ---
 
 ## Overview
 
-Project Sentinel ingests raw lab data from a simulated Company cobas analyzer, transforms it into FHIR R4 Observation resources, validates results against clinical thresholds, and streams validated data in real-time to a React dashboard — all within a single `docker-compose up` command.
+Project Sentinel ingests raw lab data from a simulated Company cobas analyser, transforms it into FHIR R4 Observation resources, validates results against clinical thresholds, and streams validated data in real-time to a React dashboard — all within a single `docker-compose up` command.
 
 ---
 
