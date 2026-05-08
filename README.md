@@ -85,6 +85,20 @@ GET /api/audit/{observationId}/revisions
 GET /api/audit/{observationId}/revisions/{rev}
 ```
 
+### Integrity Evidence (Canonical Hash + Citation Metadata)
+Sentinel can generate integrity evidence for FHIR payloads using deterministic JSON canonicalization (sorted keys/properties) and `SHA-256` hashing.
+
+Evidence includes:
+- `canonicalization` strategy used before hashing
+- `hashAlgorithm` and computed `hash`
+- `processingMillis` to help evaluate throughput impact
+- `citation` metadata with FHIR mapping guidance (`Provenance.target` and `Provenance.entity.what.identifier`)
+
+Configure citation storage label via:
+```
+INTEGRITY_CITATION_STORE=local-audit-log
+```
+
 ### Real-Time Streaming
 Spring WebSocket (STOMP) pushes validated observations to the frontend immediately — no polling delay.
 
@@ -108,7 +122,35 @@ Toggle `X-Mask-PII: true` header (or use the UI switch) to replace patient ident
 | `GET` | `/fhir/DiagnosticReport` | Reports grouped by patient |
 | `GET` | `/api/audit/{id}/revisions` | Envers revision list for an observation |
 | `GET` | `/api/audit/{id}/revisions/{rev}` | Observation state at a given revision |
+| `GET` | `/api/integrity/observation/{id}` | Canonical hash evidence for an Observation |
+| `GET` | `/api/integrity/diagnostic-report/subject/{patientId}` | Canonical hash evidence for a patient DiagnosticReport |
+| `POST` | `/api/integrity/hash?resourceType=Observation&resourceId=test-1` | Canonical hash evidence for an arbitrary FHIR JSON payload |
 | `WS`  | `/ws` (STOMP) → `/topic/results` | Real-time observation stream |
+
+### Integrity API Quick Test
+
+```bash
+# 1) Observation evidence
+curl -s http://localhost:8080/api/integrity/observation/<OBSERVATION_ID> | jq
+
+# 2) DiagnosticReport evidence (for patient 101)
+curl -s http://localhost:8080/api/integrity/diagnostic-report/subject/101 | jq
+
+# 3) Ad-hoc payload evidence
+curl -s -X POST \
+    "http://localhost:8080/api/integrity/hash?resourceType=Observation&resourceId=demo-obs" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "resourceType": "Observation",
+        "id": "demo-obs",
+        "status": "final",
+        "subject": { "reference": "Patient/101" },
+        "code": {
+            "coding": [{ "system": "http://loinc.org", "code": "2339-0", "display": "Glucose" }]
+        },
+        "valueQuantity": { "value": 102.4, "unit": "mg/dL" }
+    }' | jq
+```
 
 ---
 

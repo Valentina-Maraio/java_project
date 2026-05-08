@@ -6,6 +6,8 @@ import com.company.sentinel.domain.model.Observation;
 import com.company.sentinel.domain.ports.out.LabResultRepositoryPort;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,8 +28,16 @@ public class DiagnosticReportController {
                 .collect(Collectors.groupingBy(Observation::getSubjectReference));
 
         return byPatient.entrySet().stream()
-                .map(e -> new DiagnosticReport(e.getKey(), e.getValue()))
+                .map(e -> toDiagnosticReport(e.getKey(), e.getValue()))
                 .map(DiagnosticReportDto::from)
                 .toList();
+    }
+
+    private DiagnosticReport toDiagnosticReport(String subjectReference, List<Observation> observations) {
+        Instant issued = observations.stream()
+                .map(Observation::getEffectiveDateTime)
+                .max(Comparator.naturalOrder())
+                .orElse(Instant.now());
+        return new DiagnosticReport(subjectReference, observations, issued);
     }
 }
