@@ -31,6 +31,8 @@ server:
 sentinel:
   ingestion:
     interval-ms: ${INGESTION_INTERVAL_MS:5000}
+  integrity:
+    citation-store: ${INTEGRITY_CITATION_STORE:local-audit-log}
 
 logging:
   level:

@@ -141,3 +141,9 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Local editor history snapshots
+.history/
+
+# Java/Maven build outputs
+backend/target/

@@ -15,10 +15,14 @@ public class DiagnosticReport {
     private final List<Observation> results;
 
     public DiagnosticReport(String subjectReference, List<Observation> results) {
+        this(subjectReference, results, Instant.now());
+    }
+
+    public DiagnosticReport(String subjectReference, List<Observation> results, Instant issued) {
         this.id = UUID.randomUUID().toString();
         this.status = "final";
         this.subjectReference = subjectReference;
-        this.issued = Instant.now();
+        this.issued = issued;
         this.results = Collections.unmodifiableList(results);
     }
 
